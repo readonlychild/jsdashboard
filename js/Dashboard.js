@@ -11,12 +11,19 @@ Dashboard.initialize = function (settings) {
         handle:'.widget-header'
     };
     $(settings.container).gridstack(gridoptions);
+    $(settings.container).before(this.uiOptions);
     this.grid = $(settings.container).data('gridstack');
     this.getScreens();
+    this.getWidgets();
     this.loadScreen();
     
     // EVENT HANDLERS
     var self = this;
+    
+    /*
+    Load a screen. ".action-loadScreen"
+    The element that triggers must have a data-screenid
+    */
     $(document).on("click", ".action-loadScreen", function () {
         var $this = $(this);
         var screenId = $this.data("dash-screenid");
@@ -25,19 +32,48 @@ Dashboard.initialize = function (settings) {
         self.loadScreen();
     });
     
+    /*
+    Show widget options. ".action-showOptions"
+    The element that triggers must have a data-widget-id
+    */
     $(document).on("click", ".action-showOptions", function () {
         var wid = $(this).parent().data("widget-id");
         Dashboard.showOptions(wid);
     });
     
+    /*
+    Save widget options. ".action-saveOptions"
+    The element that triggers must have a data-widget-id
+    */
     $(document).on("click", ".action-saveOptions", function () {
         var wid = $(this).parent().data("widget-id");
         Dashboard.saveOptions(wid);
     });
     
+    /*
+    Remove a widget. ".action-removeWidget"
+    The element that triggers must have a data-widget-id
+    */
     $(document).on("click", ".action-removeWidget", function () {
         var wid = $(this).parent().data("widget-id");
         Dashboard.removeWidget(wid);
+    });
+    
+    /*
+    Save the current state. ".action-saveDashboardState"
+    */
+    $(document).on("click", ".action-saveDashboardState", function () {
+        Dashboard.save();
+    });
+    
+    /*
+    Add a widget. ".action-addWidget"
+    The element that triggers must have a data-widget-type
+    */
+    $(document).on("click", ".action-addWidget", function () {
+        var wid = Dashboard.getNewId();
+        var type = $(this).data("widget-type");
+        Dashboard.addWidget(type, wid);
     });
     
 };
@@ -173,24 +209,40 @@ Dashboard.widgetChrome = [
 ].join('');
 
 Dashboard.modalMarkup = [
-        '<div class="modal fade" id="dashModal">',
-        '  <div class="modal-dialog">',
-        '    <div class="modal-content">',
-        '    <div class="modal-header">',
-        '        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>',
-        '        <h4 class="modal-title" id="dashModal-title">Title</h4>',
-        '    </div>',
-        '    <div class="modal-body" id="dashModal-content">',
-        '        Content',
-        '    </div>',
-        '    <div class="modal-footer">',
-        '        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>',
-        '        <span id="dashModal-buttons">buttons here</span>',
-        '    </div>',
-        '    </div>',
-        '  </div>',
-        '</div>'
-    ].join('');
+    '<div class="modal fade" id="dashModal">',
+    '  <div class="modal-dialog">',
+    '    <div class="modal-content">',
+    '    <div class="modal-header">',
+    '        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>',
+    '        <h4 class="modal-title" id="dashModal-title">Title</h4>',
+    '    </div>',
+    '    <div class="modal-body" id="dashModal-content">',
+    '        Content',
+    '    </div>',
+    '    <div class="modal-footer">',
+    '        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>',
+    '        <span id="dashModal-buttons">buttons here</span>',
+    '    </div>',
+    '    </div>',
+    '  </div>',
+    '</div>'
+].join('');
+
+Dashboard.uiOptions = [
+    '<div class="dash-options">',
+    ' <div class="content">',
+    '  <span class="dropdown">',
+    '   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">My Screens <span class="caret"></span></button>',
+    '   <ul class="dropdown-menu dash-screen-list"></ul>',
+    '  </span>',
+    '  <span class="dropdown">',
+    '   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Widgets <span class="caret"></span></button>',
+    '   <ul class="dropdown-menu dash-widget-list"></ul>',
+    '  </span>',
+    '  <button type="button" class="btn btn-default action-saveDashboardState">Save State</button>',
+    ' </div>',
+    '</div>'
+].join('');
 
 /**  persistence layer  **/
 
@@ -224,11 +276,22 @@ Dashboard.getScreens = function () {
     ];
     var markup = '';
     _.each(list, function (screen) {
-        markup += '<li><a href="#" data-dash-screenid="'+screen.id+'" class="action-loadScreen">'+screen.title+'</a></li>';
+        markup += '<li><a href="#" class="action-loadScreen" data-dash-screenid="'+screen.id+'">'+screen.title+'</a></li>';
     });
-    markup += '<li class="divider"></li>';
-    markup += '<li><a href="#" class="action-newScreen">New Screen</a></li>';
-    $("#dash-screen-list").html(markup);
+    //markup += '<li class="divider"></li>';
+    //markup += '<li><a href="#" class="action-newScreen">New Screen</a></li>';
+    $(".dash-screen-list").html(markup);
+};
+Dashboard.getWidgets = function () {
+    var list = [
+        { type: 'WeatherWidget', title: 'Weather' },
+        { type: 'ClockWidget', title: 'Clock' }
+    ];
+    var markup = '';
+    _.each(list, function (wgt) {
+        markup += '<li><a href="#" class="action-addWidget" data-widget-type="'+wgt.type+'">'+wgt.title+'</a></li>';
+    });
+    $(".dash-widget-list").html(markup);
 };
 Dashboard.getScreen = function (id) {
     var self = this;

@@ -20,22 +20,27 @@
  <body>
 
 <nav class="navbar navbar-fixed-top navbar-dark bg-inverse navbar-inverse">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-top-nav">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
         <a class="navbar-brand" href="#">Dash &nbsp; </a>
+    </div>
+    <div class="collapse navbar-collapse" id="app-top-nav">
         <ul class="nav navbar-nav">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     Screens <span class="caret"></span>
                 </a>
-                <ul class="dropdown-menu" id="dash-screen-list"></ul>
+                <ul class="dropdown-menu dash-screen-list"></ul>
             </li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     Widgets <span class="caret"></span>
                 </a>
-                <ul class="dropdown-menu" id="dash-widget-list">
-                    <li><a href="#" class="action-addWidget" data-widget-type="WeatherWidget">Weather Widget</a></li>
-                    <li><a href="#" class="action-addWidget" data-widget-type="ClockWidget">Clock Widget</a></li>
-                </ul>
+                <ul class="dropdown-menu dash-widget-list"></ul>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Settings</a>
@@ -44,17 +49,14 @@
                 <a class="nav-link" href="#">About</a>
             </li>
         </ul>
-        </nav>
+    </div>
+</nav>
 
  	<div class="container-fluid">
  		
  		<div class="row">
  			
  		</div>
-         
-        <div style="padding:10px;">
-            <button class="btn btn-primary jsaction-state">Save Screen State</button>
-        </div>
 
         <div class="grid-stack grid-stack-animate" data-gs-animate="yes" data-gs-width="12">
         </div>
@@ -97,15 +99,6 @@ $(function(){ //DOM Ready
 
     Dashboard.initialize({
         container: '.grid-stack'
-    });
-
-    $(document).on("click", ".jsaction-state", function () {
-        Dashboard.save();
-    });
-    $(document).on("click", ".action-addWidget", function () {
-        var wid = Dashboard.getNewId();
-        var type = $(this).data("widget-type");
-        Dashboard.addWidget(type, wid);
     });
 
 });

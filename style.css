@@ -3,6 +3,10 @@ body { font-family:arial; padding-top:70px; background:#fff; }
 .grid-stack>.grid-stack-item>.grid-stack-item-content { left:5px; right:5px; }
 .grid-stack-item-content { background:#fff; border:1px solid #ccc; }
 
+.dash-options { padding:3px; background:#abd; margin-bottom:10px; }
+.dash-options .content { display:none; }
+.dash-options:hover .content { display:block; }
+
 .widget-header { background:#f4f4f4; padding:1px 4px; cursor:move; font-weight:bold; }
 .widget-header .options { display:none; }
 .widget-header .options i { cursor:pointer; color:#777; }

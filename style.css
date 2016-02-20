@@ -1,0 +1,25 @@
+body { font-family:arial; padding-top:70px; background:#fff; }
+
+.grid-stack>.grid-stack-item>.grid-stack-item-content { left:5px; right:5px; }
+.grid-stack-item-content { background:#fff; border:1px solid #ccc; }
+
+.widget-header { background:#f4f4f4; padding:1px 4px; cursor:move; font-weight:bold; }
+.widget-header .options { display:none; }
+.widget-header .options i { cursor:pointer; color:#777; }
+.widget-header .options i:hover { color:#444; }
+.widget-header:hover .options { display:block; }
+.widget-content { padding:2px; }
+
+
+::-webkit-scrollbar { width:7px; }
+ 
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 4px rgba(0,0,0,0.5); 
+    border-radius: 0px;
+}
+ 
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background:#abd;
+    -webkit-box-shadow: inset 0 0 4px rgba(100,130,190,0.75); 
+}
